@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package org.shoplify.userservice;
+
+option java_multiple_files = true;
+option java_package = "org.shoplify.userservice";
+option java_outer_classname = "UserService";
+
+
+message CreateUserRequest{
+  optional string email = 1;
+  optional string password = 2;
+}
+
+message CreateUserResponse{
+  optional string user_id = 1;
+}
+
+message LoginUserRequest{
+  optional string email = 1;
+  optional string password = 2;
+}
+
+message LoginUserResponse{
+  optional string user_id = 1;
+}

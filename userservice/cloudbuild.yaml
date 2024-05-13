@@ -1,0 +1,13 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'gcr.io/xenon-height-388203/aware-docker-repo/shoplify-userservice:latest'
+      - '.'
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'gcr.io/xenon-height-388203/aware-docker-repo/shoplify-userservice:latest'
+images:
+  - 'gcr.io/xenon-height-388203/aware-docker-repo/shoplify-userservice:latest'
