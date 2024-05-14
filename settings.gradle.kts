@@ -10,3 +10,4 @@
 rootProject.name = "shoplify"
 include("userservice")
 include("protogen")
+include("common")

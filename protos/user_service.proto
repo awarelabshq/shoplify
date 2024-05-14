@@ -8,8 +8,14 @@ option java_outer_classname = "UserService";
 
 
 message CreateUserRequest{
+  enum UserType{
+    UNKNOWN_USER_TYPE = 0;
+    SELLER = 1;
+    NORMAL = 2;
+  }
   optional string email = 1;
   optional string password = 2;
+  optional UserType type = 3;
 }
 
 message CreateUserResponse{
@@ -23,4 +29,5 @@ message LoginUserRequest{
 
 message LoginUserResponse{
   optional string user_id = 1;
+  optional string token = 2;
 }
