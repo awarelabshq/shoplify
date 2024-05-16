@@ -1,0 +1,15 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'gcr.io/xenon-height-388203/aware-docker-repo/shoplify-userservice:staging_latest'
+      - '-f'
+      - 'dockerfile-staging'
+      - '.'
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'gcr.io/xenon-height-388203/aware-docker-repo/shoplify-userservice:staging_latest'
+images:
+  - 'gcr.io/xenon-height-388203/aware-docker-repo/shoplify-userservice:staging_latest'

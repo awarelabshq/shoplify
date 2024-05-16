@@ -10,5 +10,5 @@ option java_outer_classname = "Storage";
 message ProductMetadata{
   optional float unit_price = 1;
   repeated string available_countries = 2;
-  repeated string categories=3;
+  repeated string categories = 3;
 }

@@ -3,8 +3,8 @@ package org.shoplify.user;
 
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.util.JsonFormat;
-import org.shoplify.common.model.UserEntity;
-import org.shoplify.common.repos.UserRepository;
+import org.shoplify.user.model.UserEntity;
+import org.shoplify.user.repos.UserRepository;
 import org.shoplify.user.util.ServiceUtil;
 import org.shoplify.userservice.CreateUserRequest;
 import org.shoplify.userservice.CreateUserResponse;
@@ -12,6 +12,7 @@ import org.shoplify.userservice.LoginUserRequest;
 import org.shoplify.userservice.LoginUserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -32,6 +33,11 @@ public class Controller {
 
     @Autowired
     UserRepository userRepository;
+
+    @GetMapping(value = "/health/check")
+    public String healthCheck() throws Exception {
+        return "healthy";
+    }
 
     @PostMapping(value = "/user/create_user")
     public String createUser(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws InvalidProtocolBufferException {

@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package org.shoplify.productservice;
+
+option java_multiple_files = true;
+option java_package = "org.shoplify.productservice";
+option java_outer_classname = "ProductService";
+
+
+message ListCategoriesRequest{
+  optional string user_country = 1;
+}
+
+message ListCategoriesResponse{
+  optional Category featured_category = 1;
+  repeated Category categories = 2;
+}
+
+message Category{
+  optional string name = 1;
+  optional string description = 2;
+  optional string image_url = 3;
+}
+
+message LoginUserRequest{
+  optional string email = 1;
+  optional string password = 2;
+}
+
+message LoginUserResponse{
+  optional string user_id = 1;
+  optional string token = 2;
+}

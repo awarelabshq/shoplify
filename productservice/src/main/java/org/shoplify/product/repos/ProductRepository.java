@@ -1,6 +1,6 @@
-package org.shoplify.common.repos;
+package org.shoplify.product.repos;
 
-import org.shoplify.common.model.ProductEntity;
+import org.shoplify.product.model.ProductEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

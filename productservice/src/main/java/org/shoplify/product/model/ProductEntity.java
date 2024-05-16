@@ -1,4 +1,4 @@
-package org.shoplify.common.model;
+package org.shoplify.product.model;
 
 
 import lombok.Data;
@@ -15,9 +15,8 @@ public class ProductEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "seller_id", referencedColumnName = "id")
-    private UserEntity seller;
+    @Column(name = "seller_id")
+    private Long sellerId;
 
     @Column(name = "available_quantity")
     private Long availableQuantity;

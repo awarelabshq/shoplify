@@ -26,7 +26,7 @@ public class DbInitializer {
     @PostConstruct
     @Transactional
     public void init() throws SQLException, IOException {
-        logger.info("DB Initializing...");
+        logger.info("DB Initializing for users...");
         Connection connection = dataSource.getConnection();
         Resource resource = new ClassPathResource("populate_db.sql");
         RunScript.execute(connection, new InputStreamReader(resource.getInputStream()));

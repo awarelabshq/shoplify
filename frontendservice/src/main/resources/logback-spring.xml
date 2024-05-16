@@ -1,0 +1,33 @@
+<configuration>
+    <springProperty scope="context" name="logfile" source="logback.log.file"/>
+
+    <!-- Define the appender for file logging -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logfile}</file> <!-- Use a placeholder for the log file path -->
+
+        <!-- Define the rolling policy -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- Set the file name pattern and time interval -->
+            <fileNamePattern>log-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+
+            <!-- Define maximum history (number of files) and total size (optional) -->
+            <maxHistory>7</maxHistory>
+
+            <!-- Set the maximum file size (in bytes) before rolling -->
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize> <!-- Set the per-file size limit (10MB) -->
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+
+        <!-- Define the encoder for log messages -->
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Set the root logger to use the FILE appender -->
+    <root level="INFO">
+        <appender-ref ref="FILE" />
+    </root>
+
+</configuration>

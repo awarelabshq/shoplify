@@ -1,0 +1,24 @@
+# Use a base image with a Java runtime
+FROM openjdk:17-alpine
+
+
+# Set the working directory inside the container
+WORKDIR /app
+
+
+# Copy the JAR file (assuming it's already built) and any other necessary files
+COPY build/libs/frontendservice-0.0.1-SNAPSHOT.jar frontendservice.jar
+
+ADD https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/download/v1.32.0/opentelemetry-javaagent.jar /usr/src/app/opentelemetry-javaagent.jar
+RUN chmod 644 /usr/src/app/opentelemetry-javaagent.jar
+ENV JAVA_TOOL_OPTIONS=-javaagent:/usr/src/app/opentelemetry-javaagent.jar
+
+ENV OTEL_SERVICE_NAME frontendservice
+ENV OTEL_RESOURCE_ATTRIBUTES="service.namespace=shoplify,deployment.environment=staging,service.version=frontendservice.2024.05.13.01"
+#ENV OTEL_EXPORTER_OTLP_ENDPOINT="http://app_collector:4317"
+#ENV OTEL_EXPORTER_OTLP_PROTOCOL=grpc
+ENV OTEL_INSTRUMENTATION_COMMON_EXPERIMENTAL_CONTROLLER_TELEMETRY_ENABLED=true
+
+EXPOSE 8081
+
+CMD ["java", "-jar", "frontendservice.jar"]

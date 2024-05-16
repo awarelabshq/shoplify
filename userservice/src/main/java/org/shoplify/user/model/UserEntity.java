@@ -1,4 +1,4 @@
-package org.shoplify.common.model;
+package org.shoplify.user.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
