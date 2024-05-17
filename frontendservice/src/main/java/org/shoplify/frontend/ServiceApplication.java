@@ -9,6 +9,7 @@ import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.OpenTelemetry;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -17,12 +18,16 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.FormHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.http.converter.protobuf.ProtobufHttpMessageConverter;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.HashMap;
 
 @SpringBootApplication
 @ComponentScan(basePackages = {"org.shoplify"})
 @EnableAspectJAutoProxy
 public class ServiceApplication extends CachingConfigurerSupport {
+
 
     public static void main(String[] args) {
         SpringApplication.run(ServiceApplication.class, args);
@@ -48,6 +53,10 @@ public class ServiceApplication extends CachingConfigurerSupport {
         return converter;
     }
 
+    @Bean
+    public EntityManagerFactoryBuilder entityManagerFactoryBuilder() {
+        return new EntityManagerFactoryBuilder(new HibernateJpaVendorAdapter(), new HashMap<>(), null);
+    }
 
     @Bean
     public ObjectMapper objectMapper() {

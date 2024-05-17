@@ -1,9 +1,13 @@
 package org.shoplify.frontend;
 
 
+import com.google.protobuf.Message;
 import com.google.protobuf.util.JsonFormat;
 import org.shoplify.common.util.ServiceClient;
+import org.shoplify.frontend.util.ServiceUtil;
+import org.shoplify.productservice.ListCategoriesResponse;
 import org.shoplify.userservice.CreateUserResponse;
+import org.shoplify.userservice.LoginUserResponse;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,20 +35,20 @@ public class Controller {
     @PostMapping(value = "/frontend/create_user")
     public String createUser(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException {
         return JsonFormat.printer()
-                .print(ServiceClient.callService(USERSERVICE_URL + "user/create_user", httpServletRequest, CreateUserResponse.class));
+                .print(ServiceClient.callService(USERSERVICE_URL + "user/create_user", ServiceUtil.getRequestBody(httpServletRequest), CreateUserResponse.class));
     }
 
 
     @PostMapping(value = "/frontend/login")
     public String login(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException {
         return JsonFormat.printer()
-                .print(ServiceClient.callService(USERSERVICE_URL + "user/login", httpServletRequest, CreateUserResponse.class));
+                .print(ServiceClient.callService(USERSERVICE_URL + "user/login", ServiceUtil.getRequestBody(httpServletRequest), LoginUserResponse.class));
     }
 
 
     @PostMapping(value = "/frontend/list_categories")
     public String listCategories(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException {
         return JsonFormat.printer()
-                .print(ServiceClient.callService(PRODUCTSERVICE_URL + "product/list_categories", httpServletRequest, CreateUserResponse.class));
+                .print(ServiceClient.callService(PRODUCTSERVICE_URL + "product/list_categories", ServiceUtil.getRequestBody(httpServletRequest), ListCategoriesResponse.class));
     }
 }

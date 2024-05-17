@@ -4,11 +4,12 @@ package org.shoplify.product;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.util.JsonFormat;
 import org.shoplify.product.model.CategoryEntity;
+import org.shoplify.product.model.ProductEntity;
 import org.shoplify.product.repos.CategoryRepository;
+import org.shoplify.product.repos.ProductRepository;
 import org.shoplify.product.util.ServiceUtil;
-import org.shoplify.productservice.Category;
-import org.shoplify.productservice.ListCategoriesRequest;
-import org.shoplify.productservice.ListCategoriesResponse;
+import org.shoplify.productservice.*;
+import org.shoplify.storage.ProductMetadata;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +29,9 @@ public class Controller {
     @Autowired
     CategoryRepository categoryRepository;
 
+    @Autowired
+    ProductRepository productRepository;
+
     @GetMapping(value = "/health/check")
     public String healthCheck() throws Exception {
         return "healthy";
@@ -36,7 +40,6 @@ public class Controller {
     @PostMapping(value = "/product/list_categories")
     public String createUser(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws InvalidProtocolBufferException {
         ListCategoriesRequest request = ServiceUtil.getRequestBody(httpServletRequest, ListCategoriesRequest.class);
-        logger.info("Got request for list categories");
         List<CategoryEntity> categories = categoryRepository.findAll();
         ListCategoriesResponse.Builder response = ListCategoriesResponse.newBuilder();
         if (!categories.isEmpty()) {
@@ -46,6 +49,28 @@ public class Controller {
             response.addCategories(getCategory(categories.get(i)));
         }
         return JsonFormat.printer().print(response);
+    }
+
+    @PostMapping(value = "/product/list_products")
+    public String listProducts(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws InvalidProtocolBufferException {
+        ListProductsRequest request = ServiceUtil.getRequestBody(httpServletRequest, ListProductsRequest.class);
+        List<ProductEntity> products = productRepository.findAll();
+        ListProductsResponse.Builder response = ListProductsResponse.newBuilder();
+        for (ProductEntity entity : products) {
+            ProductMetadata.Builder metadata = ProductMetadata.newBuilder();
+            JsonFormat.parser().merge(entity.getMetadata(), metadata);
+
+            if (metadata.getCategoriesList().contains(request.getCategory()) && metadata.getAvailableCountriesList()
+                    .contains(request.getUserCountry())) {
+                response.addProducts(getProductItem(entity, metadata.getUnitPrice()));
+            }
+        }
+        return JsonFormat.printer().print(response);
+    }
+
+    private ProductItem getProductItem(ProductEntity entity, float unitPrice) {
+        return ProductItem.newBuilder().setName(entity.getTitle()).setDescription(entity.getDescription())
+                .setPrice(unitPrice).build();
     }
 
     private Category getCategory(CategoryEntity category) {

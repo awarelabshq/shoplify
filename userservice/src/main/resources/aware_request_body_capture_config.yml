@@ -1,0 +1,10 @@
+url_configs:
+  .*/.*/.*:
+    request:
+    response:
+
+  .*/user/login:
+    request:
+      user_id_field:
+        "$.email"
+    response:

@@ -22,12 +22,19 @@ message Category{
   optional string image_url = 3;
 }
 
-message LoginUserRequest{
-  optional string email = 1;
-  optional string password = 2;
+message ListProductsRequest{
+  optional string category = 1;
+  optional int32 num_results = 2;
+  optional string user_country = 3;
 }
 
-message LoginUserResponse{
-  optional string user_id = 1;
-  optional string token = 2;
+message ListProductsResponse{
+  repeated ProductItem products = 1;
+}
+
+message ProductItem{
+  optional string name = 1;
+  optional string description = 2;
+  optional float price = 3;
+  optional string image_url = 4;
 }
