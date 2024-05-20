@@ -11,13 +11,13 @@ COPY build/libs/userservice-0.0.1-SNAPSHOT.jar userservice.jar
 
 ADD https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/download/v1.32.0/opentelemetry-javaagent.jar /usr/src/app/opentelemetry-javaagent.jar
 RUN chmod 644 /usr/src/app/opentelemetry-javaagent.jar
-#ENV JAVA_TOOL_OPTIONS=-javaagent:/usr/src/app/opentelemetry-javaagent.jar
+ENV JAVA_TOOL_OPTIONS=-javaagent:/usr/src/app/opentelemetry-javaagent.jar
 
-#ENV OTEL_SERVICE_NAME userservice
-#ENV OTEL_RESOURCE_ATTRIBUTES="service.namespace=shoplify,deployment.environment=staging,service.version=userservice.2024.05.13.01"
-#ENV OTEL_EXPORTER_OTLP_ENDPOINT="http://app_collector:4317"
-#ENV OTEL_EXPORTER_OTLP_PROTOCOL=grpc
-#ENV OTEL_INSTRUMENTATION_COMMON_EXPERIMENTAL_CONTROLLER_TELEMETRY_ENABLED=true
+ENV OTEL_SERVICE_NAME userservice
+ENV OTEL_RESOURCE_ATTRIBUTES="service.namespace=shoplify,deployment.environment=staging,service.version=userservice.2024.05.13.01"
+ENV OTEL_EXPORTER_OTLP_ENDPOINT="http://app_collector:4317"
+ENV OTEL_EXPORTER_OTLP_PROTOCOL=grpc
+ENV OTEL_INSTRUMENTATION_COMMON_EXPERIMENTAL_CONTROLLER_TELEMETRY_ENABLED=true
 
 EXPOSE 8082
 

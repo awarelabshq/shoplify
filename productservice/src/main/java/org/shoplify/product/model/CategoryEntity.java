@@ -27,5 +27,4 @@ public class CategoryEntity {
     @Column(name = "image_url")
     private String imageUrl;
 
-
 }

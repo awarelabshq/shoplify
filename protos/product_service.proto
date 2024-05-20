@@ -38,3 +38,12 @@ message ProductItem{
   optional float price = 3;
   optional string image_url = 4;
 }
+
+message SearchProductsRequest{
+  optional string query = 1;
+}
+
+message SearchProductsResponse{
+  repeated ProductItem items = 1;
+}
+

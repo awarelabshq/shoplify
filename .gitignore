@@ -1,0 +1,5 @@
+/productservice/build/
+/userservice/build/
+/frontendservice/build/
+/protogen/build/
+/protogen/src/main/java/org/shoplify/

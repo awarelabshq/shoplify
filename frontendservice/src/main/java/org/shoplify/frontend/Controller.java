@@ -1,17 +1,13 @@
 package org.shoplify.frontend;
 
 
-import com.google.protobuf.Message;
 import com.google.protobuf.util.JsonFormat;
 import org.shoplify.common.util.ServiceClient;
 import org.shoplify.frontend.util.ServiceUtil;
-import org.shoplify.productservice.ListCategoriesResponse;
+import org.shoplify.productservice.*;
 import org.shoplify.userservice.CreateUserResponse;
 import org.shoplify.userservice.LoginUserResponse;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -50,5 +46,30 @@ public class Controller {
     public String listCategories(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException {
         return JsonFormat.printer()
                 .print(ServiceClient.callService(PRODUCTSERVICE_URL + "product/list_categories", ServiceUtil.getRequestBody(httpServletRequest), ListCategoriesResponse.class));
+    }
+
+    @GetMapping(value = "/frontend/list_products")
+    public String listProducts(
+            @RequestParam("category") String category,
+            @RequestParam("country") String country,
+            HttpServletRequest httpServletRequest,
+            HttpServletResponse httpServletResponse) throws IOException {
+
+        String request = JsonFormat.printer()
+                .print(ListProductsRequest.newBuilder().setCategory(category).setUserCountry(country));
+        return JsonFormat.printer()
+                .print(ServiceClient.callService(PRODUCTSERVICE_URL + "product/list_products", request, ListProductsResponse.class));
+    }
+
+    @PostMapping(value = "/frontend/submit_search", consumes = "application/x-www-form-urlencoded")
+    public String submitSearch(
+            @RequestParam("search_query") String searchQuery,
+            HttpServletRequest httpServletRequest,
+            HttpServletResponse httpServletResponse) throws IOException {
+
+        String request = JsonFormat.printer()
+                .print(SearchProductsRequest.newBuilder().setQuery(searchQuery));
+        return JsonFormat.printer()
+                .print(ServiceClient.callService(PRODUCTSERVICE_URL + "product/list_products", request, ListProductsResponse.class));
     }
 }
