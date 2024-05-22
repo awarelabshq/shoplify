@@ -3,6 +3,7 @@ import client from './api';
 import { AwareSDK } from "aware-sdk-js";
 import './Login.css';
 import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -18,6 +19,7 @@ const Login = () => {
       }
       const loginResponse = await client.post('/frontend/login',req);
       AwareSDK.setCurrentUserId(email);
+      Cookies.set('currentUserEmail', email); // Store email in cookie
       navigate('/shop');
     } catch (error) {
       console.error('Login failed:', error);

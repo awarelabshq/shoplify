@@ -31,7 +31,7 @@ const ProductList = ({ products, onSearch, setSearchQuery }) => {
       <div className="products-grid">
         {products.map((product) => (
           <div key={product.name} className="product-card">
-            <img src={product.image_url} alt={product.name} />
+            <img src={product.imageUrl} alt={product.name} />
             <h3>{product.name}</h3>
             <p>{product.description}</p>
             <p>${product.price}</p>

@@ -8,6 +8,7 @@ import { BrowserRouter } from 'react-router-dom';
 
 window.onload = function () {
   AwareSDK.startRecording({
+    enableRecording:true,
     projectId: "3cc5e2fb-80d6-4c4b-9ab1-98cf6da202f1",
     sessionRecordingApiKey: "67292933-a8fe-411b-8e01-092c36591d83",
     endpoint: "https://ingress-staging.awarelabs.io",
@@ -26,9 +27,7 @@ const root = ReactDOM.createRoot(rootElement);
 
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
       <App />
-    </BrowserRouter>
   </React.StrictMode>
 );
 
