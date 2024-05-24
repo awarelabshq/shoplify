@@ -4,3 +4,4 @@
 /common/build/
 /protogen/build/
 /protogen/src/main/java/org/shoplify/
+/.gradle/
