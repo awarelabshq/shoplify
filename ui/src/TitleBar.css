@@ -1,0 +1,19 @@
+/* TitleBar.css */
+
+.app-bar {
+    background-color: #010101; /* Brownish background color */
+  }
+  
+  .app-bar .menu-item {
+    color: #FFFFFF; /* Contrasting white shade for menu items */
+  }
+  
+  .app-bar .title {
+    flex-grow: 1;
+    color: #FFFFFF; /* Contrasting white shade for title */
+  }
+  
+  .app-bar .profile-icon {
+    color: #FFFFFF; /* Contrasting white shade for profile icon */
+  }
+  
