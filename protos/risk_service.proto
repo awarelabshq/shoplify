@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package org.shoplify.riskservice;
+
+option java_multiple_files = true;
+option java_package = "org.shoplify.riskservice";
+option java_outer_classname = "RiskService";
+
+message GetRiskStatusRequest{
+  optional string user_id = 1;
+}
+
+message GetRiskStatusResponse{
+  optional string user_id = 1;
+  optional string risk_status = 2;
+}

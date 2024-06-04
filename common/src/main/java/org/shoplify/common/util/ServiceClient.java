@@ -6,14 +6,18 @@ import okhttp3.*;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.logging.Logger;
 
 public class ServiceClient {
     private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
     private static final OkHttpClient client = new OkHttpClient();
     public static final String USERSERVICE_URL = "http://userservice:8082/";
     public static final String PRODUCTSERVICE_URL = "http://productservice:8083/";
+    public static final String RISKSERVICE_URL = "http://riskservice:8084/";
+    private static final Logger logger = Logger.getLogger(ServiceClient.class.getName());
 
     public static <T extends Message> T callService(String url, String requestBody, Class<T> responseType) throws IOException {
+        logger.info("Calling " + url + " with " + requestBody);
         RequestBody body = RequestBody.create(requestBody, JSON);
         Request request = new Request.Builder()
                 .url(url)

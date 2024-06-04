@@ -28,6 +28,12 @@ message LoginUserRequest{
 }
 
 message LoginUserResponse{
+  enum LoginStatus{
+    UNKNOWN_LOGIN_STATUS=0;
+    SUCCESS=1;
+    DENIED_RISK_SUSPENDED=2;
+  }
   optional string user_id = 1;
   optional string token = 2;
+  optional LoginStatus status=3;
 }

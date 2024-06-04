@@ -4,7 +4,6 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { AwareSDK } from "aware-sdk-js";
-import { BrowserRouter } from 'react-router-dom';
 
 window.onload = function () {
   AwareSDK.startRecording({
@@ -16,8 +15,8 @@ window.onload = function () {
     samplingProbability: 1.0,
     maxSessionDurationSecs: 500,
     eventWindowToSaveOnError: 200,
-    untracedUriRegexListToTrack:".*://shoplify-staging.awarelabs\.io.*$",
-    tracedUriRegexListToTrack:"/^$/",
+    tracedUriRegexListToTrack:".*://shoplify-staging.awarelabs\.io.*$",
+    untracedUriRegexListToTrack:"/^$/",
     environment:"QA"
   });
 };
