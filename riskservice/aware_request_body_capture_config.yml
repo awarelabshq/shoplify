@@ -1,4 +1,0 @@
-url_configs:
-  .*/.*/.*:
-    request:
-    response:

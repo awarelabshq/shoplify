@@ -1,0 +1,19 @@
+global_config:
+  log_level: "info"
+url_configs:
+  .*:
+    request:
+      ignored_fields:
+        - "$.userId"
+      extract_headers_to_span_attributes:
+        - "content-type"
+      ignored_headers:
+        - "content-length"
+    response:
+      extract_headers_to_span_attributes:
+        - "x-powered-by"
+      ignored_headers:
+        - "etag"
+      user_id_field: "$.user_id"
+      extract_to_span_attributes:
+        - "$.risk_status.status"
