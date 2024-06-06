@@ -16,4 +16,4 @@ url_configs:
         - "etag"
       user_id_field: "$.user_id"
       extract_to_span_attributes:
-        - "$.risk_status.status"
+        - "$.risk_status"
