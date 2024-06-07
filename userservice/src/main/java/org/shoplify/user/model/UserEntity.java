@@ -27,6 +27,9 @@ public class UserEntity {
     @Column(name = "type")
     private String type;
 
+    @Column(name = "country")
+    private String country;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<FopEntity> paymentCards;
 

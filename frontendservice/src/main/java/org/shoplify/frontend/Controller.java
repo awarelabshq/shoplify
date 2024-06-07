@@ -1,11 +1,14 @@
 package org.shoplify.frontend;
 
 
+import com.google.api.client.json.Json;
 import com.google.protobuf.util.JsonFormat;
 import org.shoplify.common.util.ServiceClient;
 import org.shoplify.frontend.util.ServiceUtil;
 import org.shoplify.productservice.*;
 import org.shoplify.userservice.CreateUserResponse;
+import org.shoplify.userservice.GetUserRequest;
+import org.shoplify.userservice.GetUserResponse;
 import org.shoplify.userservice.LoginUserResponse;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,8 +47,13 @@ public class Controller {
 
     @PostMapping(value = "/frontend/list_categories")
     public String listCategories(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException {
+        org.shoplify.frontendservice.ListCategoriesRequest requestBody = ServiceUtil.getRequestBody(httpServletRequest, org.shoplify.frontendservice.ListCategoriesRequest.class);
+        GetUserResponse userResponse = ServiceClient.callService(USERSERVICE_URL + "user/get_user", JsonFormat.printer()
+                .print(GetUserRequest.newBuilder().setUserId(requestBody.getUserId())), GetUserResponse.class);
         return JsonFormat.printer()
-                .print(ServiceClient.callService(PRODUCTSERVICE_URL + "product/list_categories", ServiceUtil.getRequestBody(httpServletRequest), ListCategoriesResponse.class));
+                .print(ServiceClient.callService(PRODUCTSERVICE_URL + "product/list_categories", JsonFormat.printer()
+                        .print(ListCategoriesRequest.newBuilder()
+                                .setUserCountry(userResponse.getUserCountry())), ListCategoriesResponse.class));
     }
 
     @GetMapping(value = "/frontend/list_products")

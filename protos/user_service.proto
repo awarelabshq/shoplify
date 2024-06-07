@@ -22,6 +22,16 @@ message CreateUserResponse{
   optional string user_id = 1;
 }
 
+message GetUserRequest{
+  optional int64 user_id = 1;
+}
+
+message GetUserResponse{
+  optional string user_country = 1;
+  optional string token = 2;
+  optional string type=3;
+}
+
 message LoginUserRequest{
   optional string email = 1;
   optional string password = 2;
@@ -29,11 +39,11 @@ message LoginUserRequest{
 
 message LoginUserResponse{
   enum LoginStatus{
-    UNKNOWN_LOGIN_STATUS=0;
-    SUCCESS=1;
-    DENIED_RISK_SUSPENDED=2;
+    UNKNOWN_LOGIN_STATUS = 0;
+    SUCCESS = 1;
+    DENIED_RISK_SUSPENDED = 2;
   }
-  optional string user_id = 1;
+  optional int64 user_id = 1;
   optional string token = 2;
-  optional LoginStatus status=3;
+  optional LoginStatus status = 3;
 }

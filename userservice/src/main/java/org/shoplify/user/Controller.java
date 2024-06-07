@@ -9,10 +9,7 @@ import org.shoplify.riskservice.GetRiskStatusResponse;
 import org.shoplify.user.model.UserEntity;
 import org.shoplify.user.repos.UserRepository;
 import org.shoplify.user.util.ServiceUtil;
-import org.shoplify.userservice.CreateUserRequest;
-import org.shoplify.userservice.CreateUserResponse;
-import org.shoplify.userservice.LoginUserRequest;
-import org.shoplify.userservice.LoginUserResponse;
+import org.shoplify.userservice.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -60,14 +57,17 @@ public class Controller {
         return JsonFormat.printer().print(CreateUserResponse.newBuilder().setUserId(entity.getId() + ""));
     }
 
-    @PostMapping(value = "/user/get_users")
+    @PostMapping(value = "/user/get_user")
     public String getUsers(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws InvalidProtocolBufferException {
-        List<UserEntity> entities = userRepository.findAll();
-        if (!entities.isEmpty()) {
-            return JsonFormat.printer().print(LoginUserResponse.newBuilder().setUserId(entities.get(0).getId() + "")
-                    .setToken(entities.get(0).getToken()));
+        GetUserRequest request = ServiceUtil.getRequestBody(httpServletRequest, GetUserRequest.class);
+
+        Optional<UserEntity> userOptional = userRepository.findById(request.getUserId());
+        if (userOptional.isPresent()) {
+            UserEntity userEntity = userOptional.get();
+            return JsonFormat.printer().print(GetUserResponse.newBuilder().setUserCountry(userEntity.getCountry())
+                    .setToken(userEntity.getToken()).setType(userEntity.getType()));
         }
-        return JsonFormat.printer().print(LoginUserResponse.getDefaultInstance());
+        return JsonFormat.printer().print(GetUserResponse.getDefaultInstance());
     }
 
     @PostMapping(value = "/user/login")
@@ -88,7 +88,7 @@ public class Controller {
         entity.setToken(token);
         userRepository.save(entity);
         return JsonFormat.printer()
-                .print(LoginUserResponse.newBuilder().setUserId(entity.getId() + "").setToken(token)
+                .print(LoginUserResponse.newBuilder().setUserId(entity.getId()).setToken(token)
                         .setStatus(riskResponse.getRiskStatus()
                                 .equals("low") ? LoginUserResponse.LoginStatus.SUCCESS : LoginUserResponse.LoginStatus.DENIED_RISK_SUSPENDED));
     }

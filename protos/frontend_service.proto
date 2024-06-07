@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package org.shoplify.frontendservice;
+
+option java_multiple_files = true;
+option java_package = "org.shoplify.frontendservice";
+option java_outer_classname = "FrontendService";
+
+import "product_service.proto";
+
+message ListCategoriesRequest{
+  optional int64 user_id = 1;
+}
+
+message ListCategoriesResponse{
+  optional org.shoplify.productservice.Category featured_category = 1;
+  repeated org.shoplify.productservice.Category categories = 2;
+}
