@@ -20,6 +20,7 @@ const Login = () => {
       const loginResponse = await client.post('/frontend/login',req);
       AwareSDK.setCurrentUserId(email);
       Cookies.set('currentUserEmail', email); // Store email in cookie
+      Cookies.set('currentUserId', loginResponse.data.userId); // Store email in cookie
       navigate('/shop');
     } catch (error) {
       console.error('Login failed:', error);

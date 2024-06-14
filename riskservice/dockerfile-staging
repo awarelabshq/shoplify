@@ -16,7 +16,7 @@ COPY . .
 # Set OpenTelemetry environment variables
 ENV OTEL_SERVICE_NAME=riskservice
 ENV OTEL_RESOURCE_ATTRIBUTES="service.namespace=shoplify,deployment.environment=staging,service.version=riskservice.2024.05.13.01"
-ENV OTEL_EXPORTER_OTLP_ENDPOINT="http://app_collector:4317"
+ENV OTEL_EXPORTER_OTLP_ENDPOINT="http://shoplify_collector:4317"
 ENV OTEL_EXPORTER_OTLP_PROTOCOL=grpc
 ENV OTEL_INSTRUMENTATION_COMMON_EXPERIMENTAL_CONTROLLER_TELEMETRY_ENABLED=true
 

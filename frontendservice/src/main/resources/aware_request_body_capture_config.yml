@@ -1,4 +1,4 @@
 url_configs:
-  .*/.*/.*:
+  .*/frontend/.*:
     request:
     response:

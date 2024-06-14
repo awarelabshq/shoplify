@@ -15,7 +15,7 @@ ENV JAVA_TOOL_OPTIONS=-javaagent:/usr/src/app/opentelemetry-javaagent.jar
 
 ENV OTEL_SERVICE_NAME userservice
 ENV OTEL_RESOURCE_ATTRIBUTES="service.namespace=shoplify,deployment.environment=staging,service.version=userservice.2024.05.13.01"
-ENV OTEL_EXPORTER_OTLP_ENDPOINT="http://app_collector:4317"
+ENV OTEL_EXPORTER_OTLP_ENDPOINT="http://shoplify_collector:4317"
 ENV OTEL_EXPORTER_OTLP_PROTOCOL=grpc
 ENV OTEL_INSTRUMENTATION_COMMON_EXPERIMENTAL_CONTROLLER_TELEMETRY_ENABLED=true
 

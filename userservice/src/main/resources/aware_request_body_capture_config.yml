@@ -1,5 +1,5 @@
 url_configs:
-  .*/.*/.*:
+  .*/user/.*:
     request:
     response:
 

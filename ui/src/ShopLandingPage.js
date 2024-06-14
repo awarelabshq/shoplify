@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import client from './api';
 import './ShopLandingPage.css';
 import ProductList from './ProductList';
+import Cookies from 'js-cookie';
 
 const ShopLandingPage = () => {
   const [featuredCategory, setFeaturedCategory] = useState(null);
@@ -12,7 +13,8 @@ const ShopLandingPage = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const req = { "user_country": "US" };
+        let userId=Cookies.get('currentUserId'); // Store email in cookie
+        const req = { "user_id": userId };
         const response = await client.post('/frontend/list_categories', req);
         setFeaturedCategory(response.data.featuredCategory);
         setCategories(response.data.categories);

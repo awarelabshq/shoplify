@@ -14,8 +14,8 @@ receivers:
 
 exporters:
   otlphttp/aware:
-    endpoint: "https://ingress-staging.awarelabs.io"
-    headers: {"x-aware-project-id": "3cc5e2fb-80d6-4c4b-9ab1-98cf6da202f1"}
+    endpoint: "https://ingress-staging.testchimp.io"
+    headers: {"x-testchimp-project-id": "3cc5e2fb-80d6-4c4b-9ab1-98cf6da202f1"}
   logging:
 
 processors:
