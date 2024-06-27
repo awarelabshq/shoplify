@@ -3,11 +3,13 @@ steps:
     args:
       - 'build'
       - '-t'
-      - 'gcr.io/xenon-height-388203/aware-docker-repo/shoplify-productservice:latest'
+      - 'us-west4-docker.pkg.dev/testchimp/tc-image-repo/shoplify-productservice:latest'
+      - '-f'
+      - 'dockerfile-staging'
       - '.'
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'push'
-      - 'gcr.io/xenon-height-388203/aware-docker-repo/shoplify-productservice:latest'
+      - 'us-west4-docker.pkg.dev/testchimp/tc-image-repo/shoplify-productservice:latest'
 images:
-  - 'gcr.io/xenon-height-388203/aware-docker-repo/shoplify-productservice:latest'
+  - 'us-west4-docker.pkg.dev/testchimp/tc-image-repo/shoplify-productservice:latest'

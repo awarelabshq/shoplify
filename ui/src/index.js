@@ -8,14 +8,14 @@ import { TestChimpSDK } from "testchimp-js";
 window.onload = function () {
   TestChimpSDK.startRecording({
     enableRecording: true,
-    projectId: process.env.TESTCHIMP_PROJECT_ID,
-    sessionRecordingApiKey: process.env.TESTCHIMP_SESSION_RECORD_API_KEY,
-    endpoint: process.env.TESTCHIMP_INGRESS_ENDPOINT,
+    projectId: "de40f23a-61db-40b1-91ee-2e42435c0fab",
+    sessionRecordingApiKey: "3ac2f316-95a0-441b-9132-aba1a4e24bf6",
+    endpoint: "https://ingress-staging.testchimp.io",
     samplingProbabilityOnError: 0.1,
     samplingProbability: 1.0,
     maxSessionDurationSecs: 500,
     eventWindowToSaveOnError: 200,
-    tracedUriRegexListToTrack: ".*://shoplify-staging.awarelabs\.io.*$",
+    tracedUriRegexListToTrack: ".*://shoplify-staging-fe.testchimp\.io.*$",
     untracedUriRegexListToTrack: "/^$/",
     environment: "QA"
   });

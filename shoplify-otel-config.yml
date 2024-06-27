@@ -13,12 +13,9 @@ receivers:
             - "https://*"
 
 exporters:
-  otlphttp/aware:
+  otlphttp/aware-staging:
     endpoint: "https://ingress-staging.testchimp.io"
-    headers: {"x-testchimp-project-id": "3cc5e2fb-80d6-4c4b-9ab1-98cf6da202f1"}
-  otlphttp/aware-prod:
-    endpoint: "https://ingress.testchimp.io"
-    headers: {"x-testchimp-project-id": "5c5d05c2-b2f6-4ba2-b7e9-4cb808196be2"}
+    headers: {"x-testchimp-project-id": "de40f23a-61db-40b1-91ee-2e42435c0fab"}
   logging:
 
 processors:
@@ -29,4 +26,4 @@ service:
     traces:
       receivers: [otlp]
       processors: [batch]
-      exporters: [logging,otlphttp/aware,otlphttp/aware-prod]
+      exporters: [logging,otlphttp/aware-staging]

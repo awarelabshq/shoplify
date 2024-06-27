@@ -29,7 +29,7 @@ const Login = () => {
 
   return (
     <div className="login-container">
-      <h1 className="title">Shoplify</h1>
+      <h1 className="title">Shoplify Demo App</h1>
       <div className="login-box">
         <form onSubmit={handleLogin} className="login-form">
           <div className="form-group">
