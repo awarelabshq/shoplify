@@ -23,7 +23,9 @@
   },
   "scripts": {
     "start:staging": "PORT=8090 env-cmd -f .env.staging react-scripts start",
+    "start:notel": "PORT=8090 env-cmd -f .env.notel react-scripts start",
     "build:staging": "npm install; env-cmd -f .env.staging react-scripts build",
+    "build:notel": "npm install; env-cmd -f .env.notel react-scripts build",
     "start:prod": "PORT=8090 env-cmd -f .env.prod react-scripts start",
     "build:prod": "npm install; env-cmd -f .env.prod react-scripts build",
     "test": "react-scripts test",
