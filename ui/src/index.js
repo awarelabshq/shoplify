@@ -5,10 +5,10 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { TestChimpSDK } from "testchimp-js";
 
-const TC_PROJECT_ID=process.env.TESTCHIMP_PROJECT_ID;
-const TC_SESSION_RECORD_KEY=process.env.TESTCHIMP_SESSION_RECORD_API_KEY;
-const TESTCHIMP_TRACED_URI_REGEX=process.env.TESTCHIMP_TRACED_URI_REGEX;
-const TESTCHIMP_UNTRACED_URI_REGEX=process.env.TESTCHIMP_UNTRACED_URI_REGEX
+const TC_PROJECT_ID=process.env.REACT_APP_TESTCHIMP_PROJECT_ID;
+const TC_SESSION_RECORD_KEY=process.env.REACT_APP_TESTCHIMP_SESSION_RECORD_API_KEY;
+const TESTCHIMP_TRACED_URI_REGEX=process.env.REACT_APP_TESTCHIMP_TRACED_URI_REGEX;
+const TESTCHIMP_UNTRACED_URI_REGEX=process.env.REACT_APP_TESTCHIMP_UNTRACED_URI_REGEX
 
 window.onload = function () {
   TestChimpSDK.startRecording({
