@@ -17,32 +17,32 @@ riskservice() {
   echo "Restarting riskservice"
   docker stop shoplify_riskservice_container
   docker rm shoplify_riskservice_container
-  docker pull gcr.io/xenon-height-388203/aware-docker-repo/shoplify-riskservice:staging_latest
-  docker run -d --name shoplify_riskservice_container -p 8084:8084 -v /var/logs/riskservice:/var/logs/riskservice --network shoplify_network --network-alias riskservice gcr.io/xenon-height-388203/aware-docker-repo/shoplify-riskservice:staging_latest
+  docker pull us-west4-docker.pkg.dev/testchimp/tc-image-repo/shoplify-riskservice:staging_latest
+  docker run -d --name shoplify_riskservice_container -p 8084:8084 -v /var/logs/riskservice:/var/logs/riskservice --network shoplify_network --network-alias riskservice us-west4-docker.pkg.dev/testchimp/tc-image-repo/shoplify-riskservice:staging_latest
 }
 
 userservice() {
   echo "Restarting userservice"
   docker stop shoplify_userservice_container
   docker rm shoplify_userservice_container
-  docker pull gcr.io/xenon-height-388203/aware-docker-repo/shoplify-userservice:staging_latest
-  docker run -d --name shoplify_userservice_container -p 8082:8082 -v /var/logs/userservice:/var/logs/userservice --network shoplify_network --network-alias userservice gcr.io/xenon-height-388203/aware-docker-repo/shoplify-userservice:staging_latest
+  docker pull us-west4-docker.pkg.dev/testchimp/tc-image-repo/shoplify-userservice:staging_latest
+  docker run -d --name shoplify_userservice_container -p 8082:8082 -v /var/logs/userservice:/var/logs/userservice --network shoplify_network --network-alias userservice us-west4-docker.pkg.dev/testchimp/tc-image-repo/shoplify-userservice:staging_latest
 }
 
 productservice() {
   echo "Restarting productservice"
   docker stop shoplify_productservice_container
   docker rm shoplify_productservice_container
-  docker pull gcr.io/xenon-height-388203/aware-docker-repo/shoplify-productservice:staging_latest
-  docker run -d --name shoplify_productservice_container -p 8083:8083 -v /var/logs/productservice:/var/logs/productservice --network shoplify_network --network-alias productservice gcr.io/xenon-height-388203/aware-docker-repo/shoplify-productservice:staging_latest
+  docker pull us-west4-docker.pkg.dev/testchimp/tc-image-repo/shoplify-productservice:staging_latest
+  docker run -d --name shoplify_productservice_container -p 8083:8083 -v /var/logs/productservice:/var/logs/productservice --network shoplify_network --network-alias productservice us-west4-docker.pkg.dev/testchimp/tc-image-repo/shoplify-productservice:staging_latest
 }
 
 frontendservice() {
   echo "Restarting frontendservice"
   docker stop shoplify_frontendservice_container
   docker rm shoplify_frontendservice_container
-  docker pull gcr.io/xenon-height-388203/aware-docker-repo/shoplify-frontendservice:staging_latest
-  docker run -d --name shoplify_frontendservice_container -p 8081:8081 -v /var/logs/frontendservice:/var/logs/frontendservice --network shoplify_network --network-alias frontendservice gcr.io/xenon-height-388203/aware-docker-repo/shoplify-frontendservice:staging_latest
+  docker pull us-west4-docker.pkg.dev/testchimp/tc-image-repo/shoplify-frontendservice:staging_latest
+  docker run -d --name shoplify_frontendservice_container -p 8081:8081 -v /var/logs/frontendservice:/var/logs/frontendservice --network shoplify_network --network-alias frontendservice us-west4-docker.pkg.dev/testchimp/tc-image-repo/shoplify-frontendservice:staging_latest
 }
 
 if [ "$PROJECTS" == "all" ]; then

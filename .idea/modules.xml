@@ -4,9 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/common/IdeaProjects.shoplify.common.main.iml" filepath="$PROJECT_DIR$/.idea/modules/common/IdeaProjects.shoplify.common.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/common/shoplify.common.main.iml" filepath="$PROJECT_DIR$/.idea/modules/common/shoplify.common.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/frontendservice/shoplify.frontendservice.main.iml" filepath="$PROJECT_DIR$/.idea/modules/frontendservice/shoplify.frontendservice.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/productservice/shoplify.productservice.main.iml" filepath="$PROJECT_DIR$/.idea/modules/productservice/shoplify.productservice.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/userservice/shoplify.userservice.main.iml" filepath="$PROJECT_DIR$/.idea/modules/userservice/shoplify.userservice.main.iml" />
     </modules>
   </component>
 </project>

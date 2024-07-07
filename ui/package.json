@@ -22,6 +22,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "start:local": "PORT=8090 env-cmd -f .env.local react-scripts start",
     "start:staging": "PORT=8090 env-cmd -f .env.staging react-scripts start",
     "start:notel": "PORT=8090 env-cmd -f .env.notel react-scripts start",
     "build:staging": "npm install; env-cmd -f .env.staging react-scripts build",
