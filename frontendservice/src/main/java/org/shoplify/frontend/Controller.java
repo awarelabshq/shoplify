@@ -1,7 +1,6 @@
 package org.shoplify.frontend;
 
 
-import com.google.api.client.json.Json;
 import com.google.protobuf.util.JsonFormat;
 import org.shoplify.common.util.ServiceClient;
 import org.shoplify.frontend.util.ServiceUtil;
@@ -10,6 +9,7 @@ import org.shoplify.userservice.CreateUserResponse;
 import org.shoplify.userservice.GetUserRequest;
 import org.shoplify.userservice.GetUserResponse;
 import org.shoplify.userservice.LoginUserResponse;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,21 +31,21 @@ public class Controller {
         return "healthy";
     }
 
-    @PostMapping(value = "/frontend/create_user")
+    @PostMapping(value = "/frontend/create_user", produces = MediaType.APPLICATION_JSON_VALUE)
     public String createUser(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException {
         return JsonFormat.printer()
                 .print(ServiceClient.callService(USERSERVICE_URL + "user/create_user", ServiceUtil.getRequestBody(httpServletRequest), CreateUserResponse.class));
     }
 
 
-    @PostMapping(value = "/frontend/login")
+    @PostMapping(value = "/frontend/login", produces = MediaType.APPLICATION_JSON_VALUE)
     public String login(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException {
         return JsonFormat.printer()
                 .print(ServiceClient.callService(USERSERVICE_URL + "user/login", ServiceUtil.getRequestBody(httpServletRequest), LoginUserResponse.class));
     }
 
 
-    @PostMapping(value = "/frontend/list_categories")
+    @PostMapping(value = "/frontend/list_categories", produces = MediaType.APPLICATION_JSON_VALUE)
     public String listCategories(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException {
         org.shoplify.frontendservice.ListCategoriesRequest requestBody = ServiceUtil.getRequestBody(httpServletRequest, org.shoplify.frontendservice.ListCategoriesRequest.class);
         GetUserResponse userResponse = ServiceClient.callService(USERSERVICE_URL + "user/get_user", JsonFormat.printer()
@@ -56,7 +56,7 @@ public class Controller {
                                 .setUserCountry(userResponse.getUserCountry())), ListCategoriesResponse.class));
     }
 
-    @GetMapping(value = "/frontend/list_products")
+    @GetMapping(value = "/frontend/list_products", produces = MediaType.APPLICATION_JSON_VALUE)
     public String listProducts(
             @RequestParam("category") String category,
             @RequestParam("country") String country,
@@ -69,7 +69,7 @@ public class Controller {
                 .print(ServiceClient.callService(PRODUCTSERVICE_URL + "product/list_products", request, ListProductsResponse.class));
     }
 
-    @PostMapping(value = "/frontend/submit_search", consumes = "application/x-www-form-urlencoded")
+    @PostMapping(value = "/frontend/submit_search", consumes = "application/x-www-form-urlencoded", produces = MediaType.APPLICATION_JSON_VALUE)
     public String submitSearch(
             @RequestParam("search_query") String searchQuery,
             HttpServletRequest httpServletRequest,

@@ -11,10 +11,9 @@ import org.shoplify.product.util.ServiceUtil;
 import org.shoplify.productservice.*;
 import org.shoplify.storage.ProductMetadata;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -37,8 +36,8 @@ public class Controller {
         return "healthy";
     }
 
-    @PostMapping(value = "/product/list_categories")
-    public String createUser(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws InvalidProtocolBufferException {
+    @PostMapping(value = "/product/list_categories", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity createUser(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws InvalidProtocolBufferException {
         ListCategoriesRequest request = ServiceUtil.getRequestBody(httpServletRequest, ListCategoriesRequest.class);
         List<CategoryEntity> categories = categoryRepository.findAll();
         ListCategoriesResponse.Builder response = ListCategoriesResponse.newBuilder();
@@ -48,11 +47,11 @@ public class Controller {
         for (int i = 1; i < categories.size(); i++) {
             response.addCategories(getCategory(categories.get(i)));
         }
-        return JsonFormat.printer().print(response);
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(JsonFormat.printer().print(response));
     }
 
-    @PostMapping(value = "/product/list_products")
-    public String listProducts(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws InvalidProtocolBufferException {
+    @PostMapping(value = "/product/list_products", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity listProducts(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws InvalidProtocolBufferException {
         ListProductsRequest request = ServiceUtil.getRequestBody(httpServletRequest, ListProductsRequest.class);
         List<ProductEntity> products = productRepository.findAll();
         ListProductsResponse.Builder response = ListProductsResponse.newBuilder();
@@ -65,7 +64,7 @@ public class Controller {
                 response.addProducts(getProductItem(entity, metadata.getUnitPrice()));
             }
         }
-        return JsonFormat.printer().print(response);
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(JsonFormat.printer().print(response));
     }
 
     private ProductItem getProductItem(ProductEntity entity, float unitPrice) {

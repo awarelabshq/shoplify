@@ -11,6 +11,9 @@ import org.shoplify.user.repos.UserRepository;
 import org.shoplify.user.util.ServiceUtil;
 import org.shoplify.userservice.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -42,54 +45,55 @@ public class Controller {
         return "healthy";
     }
 
-    @PostMapping(value = "/user/create_user")
-    public String createUser(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws InvalidProtocolBufferException {
+    @PostMapping(value = "/user/create_user", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity createUser(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws InvalidProtocolBufferException {
         CreateUserRequest request = ServiceUtil.getRequestBody(httpServletRequest, CreateUserRequest.class);
         UserEntity entity = new UserEntity();
         Optional<UserEntity> existingEntity = userRepository.findByEmail(request.getEmail());
         if (existingEntity.isPresent()) {
-            return ServiceUtil.updateReturnResponse(httpServletResponse, HTTP_BAD_REQUEST);
+            return ResponseEntity.status(HTTP_BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).build();
         }
         entity.setEmail(request.getEmail());
         entity.setPassword(request.getPassword());
         entity.setType(request.getType().toString());
         entity = userRepository.save(entity);
-        return JsonFormat.printer().print(CreateUserResponse.newBuilder().setUserId(entity.getId() + ""));
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON)
+                .body(JsonFormat.printer().print(CreateUserResponse.newBuilder().setUserId(entity.getId() + "")));
     }
 
-    @PostMapping(value = "/user/get_user")
-    public String getUsers(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws InvalidProtocolBufferException {
+    @PostMapping(value = "/user/get_user", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity getUsers(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws InvalidProtocolBufferException {
         GetUserRequest request = ServiceUtil.getRequestBody(httpServletRequest, GetUserRequest.class);
 
         Optional<UserEntity> userOptional = userRepository.findById(request.getUserId());
         if (userOptional.isPresent()) {
             UserEntity userEntity = userOptional.get();
-            return JsonFormat.printer().print(GetUserResponse.newBuilder().setUserCountry(userEntity.getCountry())
-                    .setToken(userEntity.getToken()).setType(userEntity.getType()));
+            return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(JsonFormat.printer().print(GetUserResponse.newBuilder().setUserCountry(userEntity.getCountry())
+                    .setToken(userEntity.getToken()).setType(userEntity.getType())));
         }
-        return JsonFormat.printer().print(GetUserResponse.getDefaultInstance());
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(JsonFormat.printer().print(GetUserResponse.getDefaultInstance()));
     }
 
-    @PostMapping(value = "/user/login")
-    public String login(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException {
+    @PostMapping(value = "/user/login", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity login(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException {
         LoginUserRequest request = ServiceUtil.getRequestBody(httpServletRequest, LoginUserRequest.class);
         Optional<UserEntity> existingEntity = userRepository.findByEmail(request.getEmail());
         if (!existingEntity.isPresent()) {
             logger.info("No user found for " + request.getEmail());
-            return ServiceUtil.updateReturnResponse(httpServletResponse, HTTP_BAD_REQUEST);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).build();
         }
         UserEntity entity = existingEntity.get();
         if (!request.getPassword().equals(entity.getPassword())) {
-            return ServiceUtil.updateReturnResponse(httpServletResponse, HTTP_UNAUTHORIZED);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).contentType(MediaType.APPLICATION_JSON).build();
         }
         GetRiskStatusResponse riskResponse = ServiceClient.callService(RISKSERVICE_URL + "risk/get_risk_status", JsonFormat.printer()
                 .print(GetRiskStatusRequest.newBuilder().setUserId(request.getEmail())), GetRiskStatusResponse.class);
         String token = UUID.randomUUID().toString();
         entity.setToken(token);
         userRepository.save(entity);
-        return JsonFormat.printer()
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(JsonFormat.printer()
                 .print(LoginUserResponse.newBuilder().setUserId(entity.getId()).setToken(token)
                         .setStatus(riskResponse.getRiskStatus()
-                                .equals("low") ? LoginUserResponse.LoginStatus.SUCCESS : LoginUserResponse.LoginStatus.DENIED_RISK_SUSPENDED));
+                                .equals("low") ? LoginUserResponse.LoginStatus.SUCCESS : LoginUserResponse.LoginStatus.DENIED_RISK_SUSPENDED)));
     }
 }
