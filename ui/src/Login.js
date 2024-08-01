@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import client from './api';
-import { TestChimpSDK } from "testchimp-js";
+//import { TestChimpSDK } from "testchimp-js";
 import './Login.css';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
@@ -18,7 +18,7 @@ const Login = () => {
          "password":password 
       }
       const loginResponse = await client.post('/frontend/login',req);
-      TestChimpSDK.setCurrentUserId(email);
+      //TestChimpSDK.setCurrentUserId(email);
       Cookies.set('currentUserEmail', email); // Store email in cookie
       Cookies.set('currentUserId', loginResponse.data.userId); // Store email in cookie
       navigate('/shop');

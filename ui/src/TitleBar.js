@@ -4,7 +4,7 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import { Link, useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import './TitleBar.css';
-import { TestChimpSDK } from "testchimp-js";
+//import { TestChimpSDK } from "testchimp-js";
 
 const TitleBar = () => {
   const [anchorEl, setAnchorEl] = useState(null);

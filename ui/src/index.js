@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { TestChimpSDK } from "testchimp-js";
+/*import { TestChimpSDK } from "testchimp-js";
 
 const TC_PROJECT_ID=process.env.REACT_APP_TESTCHIMP_PROJECT_ID;
 const TC_SESSION_RECORD_KEY=process.env.REACT_APP_TESTCHIMP_SESSION_RECORD_API_KEY;
@@ -24,7 +24,7 @@ window.onload = function () {
     untracedUriRegexListToTrack: TESTCHIMP_UNTRACED_URI_REGEX,
     environment: "QA"
   });
-};
+};*/
 
 const rootElement = document.getElementById('root');
 const root = ReactDOM.createRoot(rootElement);

@@ -68,7 +68,8 @@ public class Controller {
     }
 
     private ProductItem getProductItem(ProductEntity entity, float unitPrice) {
-        return ProductItem.newBuilder().setName(entity.getTitle()).setDescription(entity.getDescription())
+        return ProductItem.newBuilder().setName(entity.getTitle()).setImageUrl(entity.getImageUrl())
+                .setDescription(entity.getDescription())
                 .setPrice(unitPrice).build();
     }
 
