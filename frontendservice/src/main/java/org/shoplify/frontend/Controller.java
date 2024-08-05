@@ -4,6 +4,10 @@ package org.shoplify.frontend;
 import com.google.protobuf.util.JsonFormat;
 import org.shoplify.common.util.ServiceClient;
 import org.shoplify.frontend.util.ServiceUtil;
+import org.shoplify.frontendservice.GetShippingCostRequest;
+import org.shoplify.frontendservice.GetShippingCostResponse;
+import org.shoplify.frontendservice.ListCartRequest;
+import org.shoplify.frontendservice.ListCartResponse;
 import org.shoplify.productservice.*;
 import org.shoplify.userservice.CreateUserResponse;
 import org.shoplify.userservice.GetUserRequest;
@@ -67,6 +71,26 @@ public class Controller {
                 .print(ListProductsRequest.newBuilder().setCategory(category).setUserCountry(country));
         return JsonFormat.printer()
                 .print(ServiceClient.callService(PRODUCTSERVICE_URL + "product/list_products", request, ListProductsResponse.class));
+    }
+
+    @PostMapping(value = "/frontend/list_cart", produces = MediaType.APPLICATION_JSON_VALUE)
+    public String listCart(
+            HttpServletRequest httpServletRequest,
+            HttpServletResponse httpServletResponse) throws IOException {
+        ListCartRequest requestBody = ServiceUtil.getRequestBody(httpServletRequest, ListCartRequest.class);
+        return JsonFormat.printer()
+                .print(ServiceClient.callService(PRODUCTSERVICE_URL + "product/list_cart", JsonFormat.printer()
+                        .print(requestBody), ListCartResponse.class));
+    }
+
+    @PostMapping(value = "/frontend/get_shipping_cost", produces = MediaType.APPLICATION_JSON_VALUE)
+    public String getShippingCost(
+            HttpServletRequest httpServletRequest,
+            HttpServletResponse httpServletResponse) throws IOException {
+        GetShippingCostRequest requestBody = ServiceUtil.getRequestBody(httpServletRequest, GetShippingCostRequest.class);
+        return JsonFormat.printer()
+                .print(ServiceClient.callService(PRODUCTSERVICE_URL + "product/get_shipping_cost", JsonFormat.printer()
+                        .print(requestBody), GetShippingCostResponse.class));
     }
 
     @PostMapping(value = "/frontend/submit_search", consumes = "application/x-www-form-urlencoded", produces = MediaType.APPLICATION_JSON_VALUE)

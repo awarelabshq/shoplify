@@ -37,6 +37,7 @@ message ProductItem{
   optional string description = 2;
   optional float price = 3;
   optional string image_url = 4;
+  optional int64 id=5;
 }
 
 message SearchProductsRequest{

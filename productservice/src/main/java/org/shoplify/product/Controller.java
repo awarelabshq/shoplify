@@ -3,6 +3,12 @@ package org.shoplify.product;
 
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.util.JsonFormat;
+import io.opentelemetry.api.trace.Span;
+import lombok.SneakyThrows;
+import org.shoplify.frontendservice.GetShippingCostRequest;
+import org.shoplify.frontendservice.GetShippingCostResponse;
+import org.shoplify.frontendservice.ListCartRequest;
+import org.shoplify.frontendservice.ListCartResponse;
 import org.shoplify.product.model.CategoryEntity;
 import org.shoplify.product.model.ProductEntity;
 import org.shoplify.product.repos.CategoryRepository;
@@ -18,7 +24,11 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.groupingBy;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -61,16 +71,56 @@ public class Controller {
 
             if (metadata.getCategoriesList().contains(request.getCategory()) && metadata.getAvailableCountriesList()
                     .contains(request.getUserCountry())) {
-                response.addProducts(getProductItem(entity, metadata.getUnitPrice()));
+                response.addProducts(getProductItem(entity));
             }
         }
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(JsonFormat.printer().print(response));
     }
 
-    private ProductItem getProductItem(ProductEntity entity, float unitPrice) {
+    @PostMapping(value = "/product/list_cart", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity listCart(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws InvalidProtocolBufferException {
+        ListCartRequest request = ServiceUtil.getRequestBody(httpServletRequest, ListCartRequest.class);
+        Map<Long, Long> qtyMap = request.getProductIdToQtyMap();
+        Map<Long, ProductEntity> products = productRepository.findAllByIdIn(request.getProductIdToQtyMap().keySet())
+                .stream()
+                .collect(Collectors.toMap(ProductEntity::getId, product -> product));
+        ListCartResponse.Builder response = ListCartResponse.newBuilder();
+        float sumCost = 0;
+        for (ProductEntity entity : products.values()) {
+            ProductItem productItem = getProductItem(entity);
+            response.putItemMap(entity.getId(), productItem);
+            float totalCost = productItem.getPrice() * qtyMap.get(entity.getId());
+            response.putTotalCostMap(entity.getId(), totalCost);
+            sumCost += totalCost;
+        }
+        response.setSumCost(sumCost);
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(JsonFormat.printer().print(response));
+    }
+
+    @PostMapping(value = "/product/get_shipping_cost", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity getShippingCost(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws InvalidProtocolBufferException {
+        GetShippingCostRequest request = ServiceUtil.getRequestBody(httpServletRequest, GetShippingCostRequest.class);
+        GetShippingCostResponse.Builder response = GetShippingCostResponse.newBuilder();
+        if (request.getZipCode().startsWith("00")) {
+            response.setIsSupported(false);
+            Span.current().setAttribute("shipping_supported_zip_code", false);
+        } else {
+            response.setIsSupported(true);
+            Span.current().setAttribute("shipping_supported_zip_code", true);
+        }
+        response.setShippingCost((float) (0.1 * request.getTotalCost()));
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(JsonFormat.printer().print(response));
+    }
+
+
+    @SneakyThrows
+    private ProductItem getProductItem(ProductEntity entity) {
+        ProductMetadata.Builder metadata = ProductMetadata.newBuilder();
+        JsonFormat.parser().merge(entity.getMetadata(), metadata);
         return ProductItem.newBuilder().setName(entity.getTitle()).setImageUrl(entity.getImageUrl())
+                .setId(entity.getId())
                 .setDescription(entity.getDescription())
-                .setPrice(unitPrice).build();
+                .setPrice(metadata.getUnitPrice()).build();
     }
 
     private Category getCategory(CategoryEntity category) {

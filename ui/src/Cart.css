@@ -1,0 +1,24 @@
+.cart-page {
+  padding: 20px;
+}
+
+.cart-summary {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-top: 20px;
+}
+
+.shipping-section {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.expiry-cvc {
+  display: flex;
+}
+
+.ant-table img {
+  object-fit: cover;
+}

@@ -22,7 +22,7 @@ const TitleBar = () => {
   const handleSignOut = () => {
     Cookies.remove('currentUserEmail');
     handleClose();
-    navigate('/signin');
+    navigate('/login');
   };
 
   return (
@@ -33,7 +33,7 @@ const TitleBar = () => {
         </Typography>
         {currentUserEmail && (
           <>
-            <MenuItem component={Link} to="/browse" style={{ color: '#FFFFFF' }}>
+            <MenuItem component={Link} to="/shop" style={{ color: '#FFFFFF' }}>
               Browse
             </MenuItem>
             <MenuItem component={Link} to="/cart" style={{ color: '#FFFFFF' }}>

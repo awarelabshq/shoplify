@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Button } from 'antd';
 import client from './api';
 import './ProductList.css';
 
@@ -14,6 +15,12 @@ const ProductList = ({ products, onSearch, setSearchQuery }) => {
     }
   };
 
+  const addToCart = (productId) => {
+    const cart = JSON.parse(localStorage.getItem('cart')) || {};
+    cart[productId] = (cart[productId] || 0) + 1;
+    localStorage.setItem('cart', JSON.stringify(cart));
+  };
+
   return (
     <div className="product-list-page">
       <div className="search-bar">
@@ -26,15 +33,16 @@ const ProductList = ({ products, onSearch, setSearchQuery }) => {
           }}
           placeholder="Search for products..."
         />
-        <button onClick={handleSearch}>Search</button>
+        <Button onClick={handleSearch}>Search</Button>
       </div>
       <div className="products-grid">
         {products.map((product) => (
-          <div key={product.name} className="product-card">
+          <div key={product.id} className="product-card">
             <img src={product.imageUrl} alt={product.name} />
             <h3>{product.name}</h3>
             <p>{product.description}</p>
             <p>${product.price}</p>
+            <Button onClick={() => addToCart(product.id)}>Add to cart</Button>
           </div>
         ))}
       </div>
