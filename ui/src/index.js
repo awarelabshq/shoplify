@@ -9,7 +9,7 @@ const TC_PROJECT_ID=process.env.REACT_APP_TESTCHIMP_PROJECT_ID;
 const TC_SESSION_RECORD_KEY=process.env.REACT_APP_TESTCHIMP_SESSION_RECORD_API_KEY;
 const TESTCHIMP_TRACED_URI_REGEX=process.env.REACT_APP_TESTCHIMP_TRACED_URI_REGEX;
 const TESTCHIMP_UNTRACED_URI_REGEX=process.env.REACT_APP_TESTCHIMP_UNTRACED_URI_REGEX
-
+console.log("TC PROJECT: " + TC_PROJECT_ID);
 window.onload = function () {
   TestChimpSDK.startRecording({
     enableRecording: true,
