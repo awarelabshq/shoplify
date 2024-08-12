@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button } from 'antd';
+import { Button,message } from 'antd';
 import client from './api';
 import './ProductList.css';
 
@@ -19,6 +19,7 @@ const ProductList = ({ products, onSearch, setSearchQuery }) => {
     const cart = JSON.parse(localStorage.getItem('cart')) || {};
     cart[productId] = (cart[productId] || 0) + 1;
     localStorage.setItem('cart', JSON.stringify(cart));
+    message.success('Item added to cart successfully!');
   };
 
   return (

@@ -114,6 +114,7 @@ public class Controller {
         if (request.getZipCode().startsWith("00")) {
             response.setIsSupported(false);
             Span.current().setAttribute("shipping_supported_zip_code", false);
+            throw new RuntimeException("Zip code not supported");
         } else {
             response.setIsSupported(true);
             Span.current().setAttribute("shipping_supported_zip_code", true);

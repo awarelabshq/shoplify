@@ -31,10 +31,11 @@ const Cart = () => {
         const response = await client.post('/frontend/list_cart', requestBody);
         const items = response.data.checkoutItems.map(checkoutItem => ({
             ...checkoutItem.item,        // Spread the `ProductItem` details
-            quantity: cart[checkoutItem.item.productId],  // Use product_id to get the quantity from the cart
+            quantity: cart[Number(checkoutItem.item.id)],  // Use product_id to get the quantity from the cart
             totalCost: checkoutItem.totalCost  // Add the total cost for this item
         }));
-
+        console.log("Items: ",items);
+        console.log("Cart: ",cart);
         setCartItems(items);
         setTotalCost(response.data.sumCost);
       }
@@ -55,6 +56,7 @@ const Cart = () => {
         setShippingCost('Shipping not supported for this ZIP code.');
       }
     } catch (error) {
+      message.error("An error occurred during processing. Try again later.")
       console.error('Error calculating shipping cost:', error);
     }
   };
