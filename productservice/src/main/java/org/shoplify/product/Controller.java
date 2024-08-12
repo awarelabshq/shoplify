@@ -3,18 +3,18 @@ package org.shoplify.product;
 
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.util.JsonFormat;
+import com.theokanning.openai.runs.Run;
 import io.opentelemetry.api.trace.Span;
 import lombok.SneakyThrows;
-import org.shoplify.frontendservice.GetShippingCostRequest;
-import org.shoplify.frontendservice.GetShippingCostResponse;
-import org.shoplify.frontendservice.ListCartRequest;
-import org.shoplify.frontendservice.ListCartResponse;
+import org.shoplify.frontendservice.*;
 import org.shoplify.product.model.CategoryEntity;
 import org.shoplify.product.model.ProductEntity;
 import org.shoplify.product.repos.CategoryRepository;
 import org.shoplify.product.repos.ProductRepository;
 import org.shoplify.product.util.ServiceUtil;
 import org.shoplify.productservice.*;
+import org.shoplify.productservice.ListCategoriesRequest;
+import org.shoplify.productservice.ListCategoriesResponse;
 import org.shoplify.storage.ProductMetadata;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -80,17 +80,27 @@ public class Controller {
     @PostMapping(value = "/product/list_cart", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity listCart(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws InvalidProtocolBufferException {
         ListCartRequest request = ServiceUtil.getRequestBody(httpServletRequest, ListCartRequest.class);
-        Map<Long, Long> qtyMap = request.getProductIdToQtyMap();
-        Map<Long, ProductEntity> products = productRepository.findAllByIdIn(request.getProductIdToQtyMap().keySet())
+        List<CartItem> items = request.getItemsList();
+        Map<Long, ProductEntity> products = productRepository.findAllByIdIn(items.stream()
+                        .map(item -> item.getProductId()).collect(Collectors.toSet()))
                 .stream()
                 .collect(Collectors.toMap(ProductEntity::getId, product -> product));
+        if (products.keySet().isEmpty()) {
+            throw new RuntimeException("Invalid cart");
+        }
+        Map<Long, Long> qtyMap = items.stream()
+                .collect(Collectors.toMap(
+                        CartItem::getProductId,
+                        CartItem::getQuantity,
+                        Long::sum // In case there are duplicate product IDs, sum the quantities
+                ));
         ListCartResponse.Builder response = ListCartResponse.newBuilder();
         float sumCost = 0;
         for (ProductEntity entity : products.values()) {
             ProductItem productItem = getProductItem(entity);
-            response.putItemMap(entity.getId(), productItem);
             float totalCost = productItem.getPrice() * qtyMap.get(entity.getId());
-            response.putTotalCostMap(entity.getId(), totalCost);
+            response.addCheckoutItems(DetailedCartCheckoutItem.newBuilder().setItem(productItem).setTotalCost(totalCost)
+                    .build());
             sumCost += totalCost;
         }
         response.setSumCost(sumCost);

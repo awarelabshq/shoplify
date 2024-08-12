@@ -18,17 +18,22 @@ message ListCategoriesResponse{
 }
 
 message ListCartRequest{
-  // map of product id to quantity
-  map<int64, int64> product_id_to_qty=1;
+  repeated CartItem items=1;
+}
+
+message CartItem{
+  optional int64 quantity=1;
+  optional int64 product_id=2;
 }
 
 message ListCartResponse{
-  // map of product id to product details
-  map<int64,org.shoplify.productservice.ProductItem> item_map=1;
-  // map of product id to total cost
-  map<int64,float> total_cost_map=2;
-  // total cost of the cart (before shipping).
-  float sum_cost=3;
+  repeated DetailedCartCheckoutItem checkout_items=1;
+  float sum_cost=2;
+}
+
+message DetailedCartCheckoutItem{
+  optional org.shoplify.productservice.ProductItem item=1;
+  optional float total_cost=2;
 }
 
 message GetShippingCostRequest{

@@ -17,11 +17,24 @@ const Cart = () => {
     const fetchCartItems = async () => {
       const cart = JSON.parse(localStorage.getItem('cart')) || {};
       if (Object.keys(cart).length > 0) {
-        const response = await client.post('/frontend/list_cart', { product_id_to_qty: cart });
-        const items = Object.keys(response.data.itemMap).map(key => ({
-          ...response.data.itemMap[key],
-          quantity: cart[key]
+          const cartItems = Object.entries(cart).map(([productId, quantity]) => ({
+              product_id: Number(productId),
+              quantity: quantity
+          }));
+
+          // Prepare the request body in the required format
+          const requestBody = {
+              items: cartItems
+          };
+
+          // Send the request
+        const response = await client.post('/frontend/list_cart', requestBody);
+        const items = response.data.checkoutItems.map(checkoutItem => ({
+            ...checkoutItem.item,        // Spread the `ProductItem` details
+            quantity: cart[checkoutItem.item.productId],  // Use product_id to get the quantity from the cart
+            totalCost: checkoutItem.totalCost  // Add the total cost for this item
         }));
+
         setCartItems(items);
         setTotalCost(response.data.sumCost);
       }
