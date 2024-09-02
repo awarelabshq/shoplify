@@ -13,9 +13,9 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      let req={ 
+      let req={
          "email":email,
-         "password":password 
+         "password":password
       }
       const loginResponse = await client.post('/frontend/login',req);
       //TestChimpSDK.setCurrentUserId(email);

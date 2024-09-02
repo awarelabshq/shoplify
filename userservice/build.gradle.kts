@@ -39,7 +39,7 @@ dependencies {
     implementation("com.theokanning.openai-gpt3-java:service:0.18.2")
     implementation("org.ehcache:ehcache:3.10.8")
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
-    implementation("com.github.awarelabshq:testchimp-sdk:0.1.1239")
+    implementation("com.github.awarelabshq:testchimp-sdk:0.1.1240")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-cache")
