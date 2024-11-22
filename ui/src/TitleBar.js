@@ -21,6 +21,8 @@ const TitleBar = () => {
 
   const handleSignOut = () => {
     Cookies.remove('currentUserEmail');
+    Cookies.remove('currentToken');
+    Cookies.remove('currentUserId');
     handleClose();
     TestChimpSDK.endTrackedSession();
     navigate('/login');

@@ -20,7 +20,8 @@ const Login = () => {
       const loginResponse = await client.post('/frontend/login',req);
       //TestChimpSDK.setCurrentUserId(email);
       Cookies.set('currentUserEmail', email); // Store email in cookie
-      Cookies.set('currentUserId', loginResponse.data.userId); // Store email in cookie
+      Cookies.set('currentUserId', loginResponse.data.userId); // Store userid in cookie
+      Cookies.set('currentToken', loginResponse.data.token); // Store userid in cookie
       navigate('/shop');
     } catch (error) {
       console.error('Login failed:', error);
