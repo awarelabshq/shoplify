@@ -3,23 +3,32 @@ package org.shoplify.product;
 
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.util.JsonFormat;
-import com.theokanning.openai.runs.Run;
 import io.opentelemetry.api.trace.Span;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.SneakyThrows;
 import org.shoplify.frontendservice.*;
+import org.shoplify.product.dtos.*;
 import org.shoplify.product.model.CategoryEntity;
 import org.shoplify.product.model.ProductEntity;
 import org.shoplify.product.repos.CategoryRepository;
 import org.shoplify.product.repos.ProductRepository;
 import org.shoplify.product.util.ServiceUtil;
-import org.shoplify.productservice.*;
 import org.shoplify.productservice.ListCategoriesRequest;
 import org.shoplify.productservice.ListCategoriesResponse;
+import org.shoplify.productservice.*;
 import org.shoplify.storage.ProductMetadata;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,8 +36,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-
-import static java.util.stream.Collectors.groupingBy;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -42,11 +49,19 @@ public class Controller {
     ProductRepository productRepository;
 
     @GetMapping(value = "/health/check")
+    @Operation(summary = "Health Check", description = "Checks the health status of the service.")
     public String healthCheck() throws Exception {
         return "healthy";
     }
 
     @PostMapping(value = "/product/list_categories", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "List Categories", description = "Lists all categories available.")
+    @RequestBody(content = @Content(schema = @Schema(implementation = ListCategoriesRequestDTO.class)))
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "List of categories",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ListCategoriesResponseDTO.class)))
+    })
     public ResponseEntity createUser(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws InvalidProtocolBufferException {
         ListCategoriesRequest request = ServiceUtil.getRequestBody(httpServletRequest, ListCategoriesRequest.class);
         List<CategoryEntity> categories = categoryRepository.findAll();
@@ -61,6 +76,13 @@ public class Controller {
     }
 
     @PostMapping(value = "/product/list_products", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "List Products", description = "Lists products based on the provided request.")
+    @RequestBody(content = @Content(schema = @Schema(implementation = org.shoplify.product.dtos.ListProductsRequestDTO.class)))
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "List of products",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = org.shoplify.product.dtos.ListProductsResponseDTO.class)))
+    })
     public ResponseEntity listProducts(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws InvalidProtocolBufferException {
         ListProductsRequest request = ServiceUtil.getRequestBody(httpServletRequest, ListProductsRequest.class);
         List<ProductEntity> products = productRepository.findAll();
@@ -78,6 +100,13 @@ public class Controller {
     }
 
     @PostMapping(value = "/product/list_cart", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "List Cart", description = "Lists items in the cart based on the provided request.")
+    @RequestBody(content = @Content(schema = @Schema(implementation = ListCartRequestDTO.class)))
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "List of cart items",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ListCartResponseDTO.class)))
+    })
     public ResponseEntity listCart(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws InvalidProtocolBufferException {
         ListCartRequest request = ServiceUtil.getRequestBody(httpServletRequest, ListCartRequest.class);
         List<CartItem> items = request.getItemsList();
@@ -108,6 +137,13 @@ public class Controller {
     }
 
     @PostMapping(value = "/product/get_shipping_cost", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Get Shipping Cost", description = "Calculates the shipping cost based on the provided request.")
+    @RequestBody(content = @Content(schema = @Schema(implementation = GetShippingCostRequestDTO.class)))
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Shipping cost details",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = GetShippingCostResponseDTO.class)))
+    })
     public ResponseEntity getShippingCost(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws InvalidProtocolBufferException {
         GetShippingCostRequest request = ServiceUtil.getRequestBody(httpServletRequest, GetShippingCostRequest.class);
         GetShippingCostResponse.Builder response = GetShippingCostResponse.newBuilder();

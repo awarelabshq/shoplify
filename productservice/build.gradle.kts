@@ -22,6 +22,7 @@ dependencies {
         exclude("com.google.protobuf:protobuf-java")
         exclude("com.google.protobuf:protobuf-java-util")
     }
+    implementation("org.springdoc:springdoc-openapi-ui:1.8.0")
     implementation("com.github.wnameless.json:json-flattener:0.16.6")
     implementation("com.google.protobuf:protobuf-java:3.24.4")
     implementation("com.google.protobuf:protobuf-java-util:3.24.4")

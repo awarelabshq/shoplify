@@ -91,6 +91,7 @@ public class Controller {
         String token = UUID.randomUUID().toString();
         entity.setToken(token);
         userRepository.save(entity);
+
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(JsonFormat.printer()
                 .print(LoginUserResponse.newBuilder().setUserId(entity.getId()).setToken(token)
                         .setStatus(riskResponse.getRiskStatus()
