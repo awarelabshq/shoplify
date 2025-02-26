@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button,message } from 'antd';
 import client from './api';
 import './ProductList.css';
+import ChatWidget from './ChatWidget';
 
 const ProductList = ({ products, onSearch, setSearchQuery }) => {
   const [searchQuery, setLocalSearchQuery] = useState('');
@@ -47,6 +48,7 @@ const ProductList = ({ products, onSearch, setSearchQuery }) => {
           </div>
         ))}
       </div>
+      <ChatWidget />
     </div>
   );
 };

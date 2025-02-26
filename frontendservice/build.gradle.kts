@@ -2,10 +2,10 @@ plugins {
     java
     id("org.springframework.boot") version "2.7.4"
     id("io.spring.dependency-management") version "1.1.0"
+    id("org.jetbrains.kotlin.jvm") version "1.8.10"
 }
 
 version = "0.0.1-SNAPSHOT"
-java.sourceCompatibility = JavaVersion.VERSION_17
 
 repositories {
     mavenCentral()
@@ -17,6 +17,7 @@ dependencies {
     implementation(project(":protogen"))
     implementation("ch.qos.logback:logback-classic")
     implementation(platform("com.google.cloud:spring-cloud-gcp-dependencies:3.7.2"))
+    implementation(platform("com.aallam.openai:openai-client-bom:3.8.2"))
     implementation("com.google.cloud:spring-cloud-gcp-starter-security-firebase")
     implementation("com.google.cloud:spring-cloud-gcp-starter-secretmanager") {
         exclude("com.google.protobuf:protobuf-java")
@@ -52,6 +53,7 @@ dependencies {
     }
     implementation("com.jayway.jsonpath:json-path:2.9.0")
     implementation("org.apache.ignite:ignite-spring-data-2.2-ext:1.0.0")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.10") // Updated version
     implementation("org.springframework.data:spring-data-commons")
     implementation("org.hibernate:hibernate-core:5.4.20.Final")
     implementation("org.postgresql:postgresql")
@@ -61,14 +63,21 @@ dependencies {
     implementation("net.jpountz.lz4:lz4:1.3.0")
     implementation("org.hibernate:hibernate-jpamodelgen:5.4.20.Final")
     implementation("com.squareup.okhttp3:okhttp:4.10.0")
+    implementation("com.aallam.openai:openai-client") // Updated version
     implementation("org.jsoup:jsoup:1.14.3")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.3.70")
     implementation("com.google.cloud:google-cloud-storage:2.32.0")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     compileOnly("org.projectlombok:lombok:1.18.20")
+    runtimeOnly("io.ktor:ktor-client-okhttp")
     annotationProcessor("org.projectlombok:lombok:1.18.20")
 }
 
+kotlin {
+    jvmToolchain {
+        (this as JavaToolchainSpec).languageVersion.set(JavaLanguageVersion.of(17))
+    }
+    jvmToolchain(17)
+}
 
 tasks {
     // Configure the processResources task to filter the correct application.properties file

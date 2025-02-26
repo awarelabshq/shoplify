@@ -1,0 +1,23 @@
+{
+  "name": "riskservice",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@opentelemetry/api": "^1.8.0",
+    "@opentelemetry/auto-instrumentations-node": "^0.46.1",
+    "@opentelemetry/exporter-trace-otlp-http": "^0.51.1",
+    "@opentelemetry/resources": "^1.24.1",
+    "@opentelemetry/sdk-node": "^0.51.1",
+    "@opentelemetry/sdk-trace-node": "^1.24.1",
+    "@opentelemetry/semantic-conventions": "^1.24.1",
+    "express": "^4.19.2",
+    "testchimp-node": "^1.0.122"
+  }
+}

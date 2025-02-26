@@ -2,28 +2,18 @@ package org.shoplify.frontend;
 
 import com.google.protobuf.util.JsonFormat;
 import org.shoplify.common.util.ServiceClient;
+import org.shoplify.frontend.dtos.*;
 import org.shoplify.frontend.util.ServiceUtil;
-import org.shoplify.frontendservice.GetShippingCostRequest;
-import org.shoplify.frontendservice.GetShippingCostResponse;
-import org.shoplify.frontendservice.ListCartRequest;
-import org.shoplify.frontendservice.ListCartResponse;
+import org.shoplify.frontendservice.*;
 import org.shoplify.productservice.*;
+import org.shoplify.productservice.ListCategoriesRequest;
+import org.shoplify.productservice.ListCategoriesResponse;
 import org.shoplify.userservice.CreateUserResponse;
 import org.shoplify.userservice.GetUserRequest;
 import org.shoplify.userservice.GetUserResponse;
 import org.shoplify.userservice.LoginUserResponse;
-import org.shoplify.frontend.dtos.CreateUserRequestDTO;
-import org.shoplify.frontend.dtos.CreateUserResponseDTO;
-import org.shoplify.frontend.dtos.GetShippingCostRequestDTO;
-import org.shoplify.frontend.dtos.GetShippingCostResponseDTO;
-import org.shoplify.frontend.dtos.ListCartRequestDTO;
-import org.shoplify.frontend.dtos.ListCartResponseDTO;
-import org.shoplify.frontend.dtos.ListCategoriesRequestDTO;
-import org.shoplify.frontend.dtos.ListCategoriesResponseDTO;
 import org.shoplify.frontend.dtos.ListProductsResponseDTO;
-import org.shoplify.frontend.dtos.LoginUserRequestDTO;
-import org.shoplify.frontend.dtos.LoginUserResponseDTO;
-import org.shoplify.frontend.dtos.ListProductsResponseDTO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,6 +23,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -45,6 +36,9 @@ import static org.shoplify.common.util.ServiceClient.USERSERVICE_URL;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class Controller {
     private static final Logger logger = Logger.getLogger(Controller.class.getName());
+
+    @Autowired
+    OpenAiKotlinFacade openAiKotlinFacade;
 
     @GetMapping(value = "/health/check")
     @Operation(summary = "Health Check", description = "Checks the health of the service.")
@@ -59,6 +53,18 @@ public class Controller {
     public String createUser(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException {
         return JsonFormat.printer()
                 .print(ServiceClient.callService(USERSERVICE_URL + "user/create_user", ServiceUtil.getRequestBody(httpServletRequest), CreateUserResponse.class));
+    }
+
+    @PostMapping(value = "/frontend/chat", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Chat", description = "Provide chat support")
+    @RequestBody(description = "Chat", required = true, content = @Content(schema = @Schema(implementation = ChatRequestDTO.class)))
+    @ApiResponse(responseCode = "200", description = "Chat successfully processed", content = @Content(schema = @Schema(implementation = ChatResponseDTO.class)))
+    public String chat(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException {
+        ChatRequest.Builder builder = ChatRequest.newBuilder();
+        JsonFormat.parser().merge(ServiceUtil.getRequestBody(httpServletRequest), builder);
+        String response = openAiKotlinFacade.getResponse(builder.getMessage(), builder.getPreviousMessagesList());
+        return JsonFormat.printer()
+                .print(ChatResponse.newBuilder().setMessage(response));
     }
 
     @PostMapping(value = "/frontend/login", produces = MediaType.APPLICATION_JSON_VALUE)
